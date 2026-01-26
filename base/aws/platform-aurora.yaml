@@ -58,3 +58,12 @@ mgmt:
             template:
               source:
                 repoURL: $HELM_REGISTRY
+
+
+
+      argoSolution:
+        enabled: true
+        project:
+          global:
+            sourceRepos:
+              - "https://artifacts-artefacts.devops.cloud-nuage.canada.ca/*"

@@ -103,8 +103,13 @@ get_aks_kubeconfig () {
 validate_aws_instance_profile () {
   echo "Validating IAM Instance Profile authentication..."
   
+  # Get IMDSv2 token first
+  IMDS_TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+    -H "X-aws-ec2-metadata-token-ttl-seconds: 300" \
+    --connect-timeout 2 2>/dev/null) || true
+  
   # Check if we're running on an EC2 instance with an instance profile
-  if ! curl --silent --connect-timeout 2 -H 'X-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/meta-data/iam/security-credentials/ > /dev/null 2>&1; then
+  if [ -z "$IMDS_TOKEN" ]; then
     echo "❌ ERROR: Unable to reach EC2 instance metadata service."
     echo "   This script must run on an EC2 instance with an IAM Instance Profile attached."
     echo "   Please ensure:"
@@ -114,8 +119,9 @@ validate_aws_instance_profile () {
     exit 1
   fi
   
-  # Get the instance profile name
-  INSTANCE_PROFILE_NAME=$(curl --silent -H 'X-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/meta-data/iam/security-credentials/)
+  # Get the instance profile name using the token
+  INSTANCE_PROFILE_NAME=$(curl -s -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+    http://169.254.169.254/latest/meta-data/iam/security-credentials/)
   
   if [ -z "$INSTANCE_PROFILE_NAME" ]; then
     echo "❌ ERROR: No IAM Instance Profile attached to this EC2 instance."
