@@ -32,32 +32,32 @@ mgmt:
             enabled: false
           
         helm:
-          repository: $HELM_REGISTRY
+          repository: "$HELM_REGISTRY"
     
       argocdProjects:
         platform:
           applicationSet:
-            generator:
-              git:
-                repoURL: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
-                revision: "main"
-                files: 
-                  - path: "$AURORA_PLATFORM_CLUSTERS_PATH"
+            generators:
+              - git:
+                  repoURL: "$AURORA_PLATFORM_CLUSTERS_REPOSITORY"
+                  revision: "main"
+                  files: 
+                    - path: "$AURORA_PLATFORM_CLUSTERS_PATH"
             template:
               source:
-                repoURL: $HELM_REGISTRY
+                repoURL: "$HELM_REGISTRY"
 
         solutions:
           applicationSet:
-            generator:
-              git:
-                repoURL: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
-                revision: "main"
-                files: 
-                  - path: "$AURORA_PLATFORM_NAMESPACE_PATH"
+            generators:
+              - git:
+                  repoURL: "$AURORA_PLATFORM_CLUSTERS_REPOSITORY"
+                  revision: "main"
+                  files: 
+                    - path: "$AURORA_PLATFORM_NAMESPACE_PATH"
             template:
               source:
-                repoURL: $HELM_REGISTRY
+                repoURL: "$HELM_REGISTRY"
                 helmValues:
                   argocdProject:
                     sourceRepos: ['*']

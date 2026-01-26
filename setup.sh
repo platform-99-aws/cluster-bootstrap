@@ -31,8 +31,6 @@ helm repo add aurora $HELM_REGISTRY --force-update
 ### argocd-operator chart ###
 #############################
 
-ls -la base/
-
 echo ""
 echo "[${BOOTSTRAP_CLUSTER}] Installing Argo CD Operator in argo-operator-system..."
 do_helm "${BOOTSTRAP_CLUSTER}" \
