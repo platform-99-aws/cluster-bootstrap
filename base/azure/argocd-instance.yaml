@@ -1,0 +1,20 @@
+argocdInstance:
+  argocdVaultPlugin:
+    env:
+      ARGOCD_ENV_AVP_TYPE: "azurekeyvault"
+      ARGOCD_ENV_AZURE_CLIENT_ID: $AZURE_MSI_CLIENT_ID
+
+register:
+  repositories:
+    aurora-helm:
+       type: helm
+       url: $HELM_REGISTRY
+    project-aurora:
+      type: git
+      url: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+  repositoryCreds:
+    project-aurora-creds:
+      type: git
+      url: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+      username: aurora-svc
+      password: $GIT_REPOSITORY_PAT

@@ -1,0 +1,23 @@
+argocdInstance:
+  logLevel: "debug"
+  argocdVaultPlugin:
+    env:
+      ARGOCD_ENV_AVP_TYPE: "awssecretsmanager"
+      ARGOCD_ENV_AWS_REGION: "$AWS_REGION"
+      ARGOCD_ENV_AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      ARGOCD_ENV_AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+
+register:
+  repositories:
+    aurora-helm:
+       type: helm
+       url: $HELM_REGISTRY
+    project-aurora:
+      type: git
+      url: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+  repositoryCreds:
+    project-aurora-creds:
+      type: git
+      url: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+      username: aurora-svc
+      password: $GIT_REPOSITORY_PAT

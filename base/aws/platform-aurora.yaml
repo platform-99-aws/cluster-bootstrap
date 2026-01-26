@@ -1,0 +1,60 @@
+global:
+  project: "default"
+
+core:
+  enabled: false
+
+app:
+  enabled: false
+  
+mgmt:
+  enabled: true
+  components:
+    argoOperator: {}
+
+    billOfLanding:
+      enabled:
+        false
+
+    argoFoundation:
+      argocdInstance:
+        env:
+          ARGOCD_ENV_AVP_TYPE: "awssecretsmanager"
+          ARGOCD_ENV_REGION: $AWS_REGION
+
+          aadPodIdentity:
+            enabled: false
+
+          netpol:
+            enabled: false
+          
+          notifications:
+            enabled: false
+          
+        helm:
+          repository: $HELM_REGISTRY
+    
+      argocdProjects:
+        platform:
+          applicationSet:
+            generator:
+              git:
+                repoURL: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+                revision: "main"
+                files: 
+                  - path: "$AURORA_PLATFORM_CLUSTERS_PATH"
+            template:
+              source:
+                repoURL: $HELM_REGISTRY
+
+        solutions:
+          applicationSet:
+            generator:
+              git:
+                repoURL: $AURORA_PLATFORM_CLUSTERS_REPOSITORY
+                revision: "main"
+                files: 
+                  - path: "$AURORA_PLATFORM_NAMESPACE_PATH"
+            template:
+              source:
+                repoURL: $HELM_REGISTRY
