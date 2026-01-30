@@ -154,7 +154,7 @@ until do_kubectl "${BOOTSTRAP_CLUSTER}" get service -n platform-management-syste
   sleep 0
 done
 
-argocd_port=$(do_kubectl "${BOOTSTRAP_CLUSTER}" get service -n platform-management-system argocd-server -o jsonpath='{.spec.ports[?(@.name == "https")].nodePort}')
+argocd_port=$(do_kubectl "${BOOTSTRAP_CLUSTER}" get service -n platform-management-system argocd-server -o jsonpath='{.spec.ports[?(@.name == "http")].nodePort}')
 
 until do_kubectl "${BOOTSTRAP_CLUSTER}" get secret -n platform-management-system argocd-cluster >/dev/null 2>&1; do
   sleep 0
