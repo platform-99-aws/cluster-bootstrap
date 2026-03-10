@@ -35,6 +35,18 @@ mgmt:
           repository: "$HELM_REGISTRY"
     
       argocdProjects:
+        syncWindows:
+          - applications:
+              - '*'
+            clusters:
+              - '*'
+            duration: 24h
+            kind: deny
+            manualSync: false
+            namespaces:
+              - '*'
+            schedule: 0 0 * * 6
+            timeZone: America/Toronto
         platform:
           applicationSet:
             generators:
